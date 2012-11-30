@@ -1,0 +1,22 @@
+{
+    "name": "webignition/node-jslint-output-parser",
+    "description": "Parser for the output of reid / node-jslint, get lovely things such as a list of errors, error counts, % of content scanned, bunnies",
+    "keywords": ["RSS"],
+    "homepage": "https://github.com/webignition/node-jslint-output-parser",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jon Cram",
+            "email": "jon@webignition.net"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },    
+    "require": {
+        "php": ">=5.3.0",
+        "webignition/string-parser":"*"
+    },
+    "minimum-stability":"dev"
+}
