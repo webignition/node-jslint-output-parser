@@ -15,6 +15,7 @@ class Parser extends StringParser {
     const STATE_LOCATING_ERROR_MESSAGE = 3;
     const STATE_READING_ERROR_MESSAGE = 4;
     const STATE_COMPLETE = 5;
+    const STATE_FAILED = 6;
     
     const ERROR_NUMBER_PREFIX = '#';
     const ERROR_NUMBER_ERROR_MESSAGE_SEPARATOR = ' ';
@@ -37,21 +38,7 @@ class Parser extends StringParser {
      *
      * @var HeaderLine
      */
-    private $headerLine = null;
-    
-    
-//    /**
-//     * 
-//     * @param string $inputString
-//     */
-//    public function parse($inputString) {
-//        $this->errorNumber = '';
-//        $this->errorMessage = '';
-//        $this->headerLine = null;
-//        
-//        parent::parse($inputString);
-//    }
-    
+    private $headerLine = null;    
     
     protected function parseCurrentCharacter() {
         
@@ -59,12 +46,11 @@ class Parser extends StringParser {
             case self::STATE_UNKNOWN:
                 if ($this->getCurrentCharacterPointer() === 0) {
                     $this->setCurrentState(self::STATE_LOCATING_ERROR_NUMBER);
-                    $this->incrementCurrentCharacterPointer();
                 }
 
                 break;
             
-            case self::STATE_LOCATING_ERROR_NUMBER:                
+            case self::STATE_LOCATING_ERROR_NUMBER:               
                 if ($this->getCurrentCharacter() == self::ERROR_NUMBER_PREFIX) {
                     $this->setCurrentState(self::STATE_READING_ERROR_NUMBER);
                 }
@@ -78,18 +64,22 @@ class Parser extends StringParser {
                     $this->errorNumber .= $this->getCurrentCharacter();                    
                 }
                 
-                if ($this->getCurrentCharacter() == self::ERROR_NUMBER_ERROR_MESSAGE_SEPARATOR) {
-                    $this->headerLine = new HeaderLine();
-                    $this->headerLine->setErrorNumber($this->errorNumber);
-                    $this->errorNumber = null;
-                    $this->setCurrentState(self::STATE_LOCATING_ERROR_MESSAGE);
+                if ($this->getCurrentCharacter() == self::ERROR_NUMBER_ERROR_MESSAGE_SEPARATOR) {                    
+                    if ($this->errorNumber == '') {
+                        $this->setCurrentState(self::STATE_FAILED);
+                    } else {
+                        $this->headerLine = new HeaderLine();
+                        $this->headerLine->setErrorNumber($this->errorNumber);
+                        $this->errorNumber = null;
+                        $this->setCurrentState(self::STATE_LOCATING_ERROR_MESSAGE);                        
+                    }
                 }
                 
                 $this->incrementCurrentCharacterPointer();
 
                 break;
                 
-            case self::STATE_LOCATING_ERROR_MESSAGE;
+            case self::STATE_LOCATING_ERROR_MESSAGE;                
                 $this->errorMessage .= $this->getCurrentCharacter();
                 
                 if ($this->isCurrentCharacterLastCharacter()) {
@@ -99,7 +89,11 @@ class Parser extends StringParser {
                 }
                 
                 $this->incrementCurrentCharacterPointer();
-                break;            
+                break;
+                
+            case self::STATE_FAILED:
+                $this->stop();
+                break;
         }
     }
     
@@ -109,7 +103,11 @@ class Parser extends StringParser {
      * @return HeaderLine
      */
     public function getHeaderLine() {
-        return $this->headerLine;
+        if ($this->hasParsedValidHeaderLine()) {
+            return $this->headerLine;
+        }
+        
+        return null;
     }
     
     

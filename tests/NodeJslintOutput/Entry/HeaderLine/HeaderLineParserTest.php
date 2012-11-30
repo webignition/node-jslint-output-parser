@@ -12,7 +12,7 @@ class HeaderLineParserTest extends BaseTest {
         $parser = new HeaderLineParser();
         
         for ($generatedErrorNumber = 0; $generatedErrorNumber <= 100; $generatedErrorNumber++) {            
-            $parser->parse(" #".$generatedErrorNumber." Error Message Here");
+            $parser->parse("#".$generatedErrorNumber." Error Message Here");
             $headerLine = $parser->getHeaderLine();
             
             $this->assertEquals($generatedErrorNumber, $headerLine->getErrorNumber());
@@ -35,7 +35,7 @@ class HeaderLineParserTest extends BaseTest {
         $parser = new HeaderLineParser();
         
         foreach ($headerLineErrorMessages as $index => $headerLineErrorMessage) {
-            $parser->parse(' #'.$index.' '.$headerLineErrorMessage);
+            $parser->parse('#'.$index.' '.$headerLineErrorMessage);
             $headerLine = $parser->getHeaderLine();    
             $this->assertEquals($headerLineErrorMessage, $headerLine->getErrorMessage());            
         }
