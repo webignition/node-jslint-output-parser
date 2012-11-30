@@ -2,7 +2,7 @@
 
 use webignition\NodeJslintOutput\Entry\HeaderLine\Parser as HeaderLineParser;
 
-class ParserTest extends BaseTest {
+class HeaderLineParserTest extends BaseTest {
     
     public function setUp() {
         $this->setTestFixturePath(__CLASS__, $this->getName());
