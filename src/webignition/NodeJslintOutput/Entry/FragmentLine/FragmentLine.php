@@ -5,7 +5,7 @@ namespace webignition\NodeJslintOutput\Entry\FragmentLine;
  * Models the fragment line from a nodejs-lint output entry
  * 
  * Raw line format:
- * <space><space><space><space><fragment><space>//<space>Line<space><line number>,<space>Pos<space><column number>
+ * <one or more spaces><fragment><space>//<space>Line<space><line number>,<space>Pos<space><column number>
  * 
  * Example:
  *     if (completionPercentValue.text() != latestTestData.completion_percent) { // Line 10, Pos 43
@@ -92,6 +92,6 @@ class FragmentLine {
      * @return string
      */
     public function __toString() {
-        return '    ' . $this->getFragment().' // Line '.$this->getLineNumber().', Pos '.$this->getColumnNumber();
+        return $this->getFragment().' // Line '.$this->getLineNumber().', Pos '.$this->getColumnNumber();
     }
 }

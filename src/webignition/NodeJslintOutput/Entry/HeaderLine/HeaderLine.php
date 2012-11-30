@@ -67,7 +67,7 @@ class HeaderLine {
      * @return string
      */
     public function __toString() {
-        return ' #'.$this->getErrorNumber().' '.$this->getErrorMessage();
+        return '#'.$this->getErrorNumber().' '.$this->getErrorMessage();
     }
     
 }
