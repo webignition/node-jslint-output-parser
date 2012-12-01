@@ -60,7 +60,6 @@ foreach ($outputEntries as $outputEntry) {
     echo $outputEntry->getHeaderLine() . "\n";
     echo $outputEntry->getFragmentLine() . "\n";    
 }
-);
 ```
 
 See? Useful. We can see how many entries are in the output, what the entries are and how much of the linted content 
@@ -83,7 +82,6 @@ $nodeJsLintOutput = $parser->getNodeJsLintOutput();
         
 $this->assertTrue($nodeJsLintOutput->wasStopped());
 $this->assertFalse($nodeJsLintOutput->hasTooManyErrors());
-);
 ```
 
 Building
