@@ -14,11 +14,11 @@ class ParserTest extends BaseTest {
         $parser = new Parser();
         $parser->parse($output);
         
-        $nodeJsLineOutput = $parser->getNodeJsLintOutput();
+        $nodeJsLintOutput = $parser->getNodeJsLintOutput();
         
-        $this->assertNotNull($nodeJsLineOutput);
-        $this->assertEquals(0, $nodeJsLineOutput->getEntryCount());
-        $this->assertEquals(100, $nodeJsLineOutput->getPercentScanned());
+        $this->assertNotNull($nodeJsLintOutput);
+        $this->assertEquals(0, $nodeJsLintOutput->getEntryCount());
+        $this->assertEquals(100, $nodeJsLintOutput->getPercentScanned());
     }
     
     
