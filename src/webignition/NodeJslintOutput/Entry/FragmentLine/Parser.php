@@ -1,7 +1,7 @@
 <?php
 namespace webignition\NodeJslintOutput\Entry\FragmentLine;
 
-use webignition\StringParser\StringParser;
+//use webignition\StringParser\StringParser;
 
 /**
  *  Parse a raw nodejs-lint entry fragment line
@@ -9,39 +9,10 @@ use webignition\StringParser\StringParser;
  *  Example fragment line:|
  *      if (completionPercentValue.text() != latestTestData.completion_percent) { // Line 10, Pos 43
  */
-class Parser extends StringParser {
-    
-    const STATE_READING_FRAGMENT = 2;
-    const STATE_LOCATING_LINE_NUMBER = 3;
-    const STATE_READING_LINE_NUMBER = 4;
-    const STATE_LOCATING_COLUMN_NUMBER = 5;
-    const STATE_READING_COLUMN_NUMBER = 6;      
-    const STATE_COMPLETE = 7;
+class Parser {
     
     const FRAGMENT_COORDINATES_SEPARATOR = '//';
-    const LINE_NUMBER_COLUMN_NUMBER_SEPARATOR = ',';
-    
-    
-    /**
-     *
-     * @var string
-     */
-    private $fragment = '';
-
-    
-    /**
-     *
-     * @var int
-     */
-    private $lineNumber = '';
-    
-    
-    /**
-     *
-     * @var int
-     */
-    private $columnNumber = ''; 
-    
+    const LINE_NUMBER_COLUMN_NUMBER_SEPARATOR = ',';    
     
     /**
      *
@@ -50,78 +21,77 @@ class Parser extends StringParser {
     private $fragmentLine = null;
     
     
+    /**
+     *
+     * @var boolean
+     */
+    private $hasParsedValidFragmentLine = false;
     
-    protected function parseCurrentCharacter() {        
-        switch ($this->getCurrentState()) {
-            case self::STATE_UNKNOWN:
-                if ($this->getCurrentCharacterPointer() === 0) {
-                    $this->setCurrentState(self::STATE_READING_FRAGMENT);
-                }
-
-                break;
-            
-            case self::STATE_READING_FRAGMENT:                
-                if ($this->getCurrentCharacter() . $this->getNextCharacter() == self::FRAGMENT_COORDINATES_SEPARATOR) {
-                    $this->fragmentLine = new FragmentLine();                    
-                    $this->fragmentLine->setFragment(substr($this->fragment, 0, strlen($this->fragment) - 1));
-                    $this->fragment = null;
-                    
-                    $this->setCurrentState(self::STATE_LOCATING_LINE_NUMBER);
-                } else {
-                    $this->fragment .= $this->getCurrentCharacter();
-                }
-                
-                $this->incrementCurrentCharacterPointer();
-                break;
-            
-            case self::STATE_LOCATING_LINE_NUMBER:                
-                if (ctype_digit($this->getCurrentCharacter())) {
-                    $this->setCurrentState(self::STATE_READING_LINE_NUMBER);
-                } else {
-                    $this->incrementCurrentCharacterPointer();
-                }                
-                
-                break;
-            
-            case self::STATE_READING_LINE_NUMBER:                
-                if (ctype_digit($this->getCurrentCharacter())) {
-                    $this->lineNumber .= $this->getCurrentCharacter();
-                }
-                
-                if ($this->getCurrentCharacter() == self::LINE_NUMBER_COLUMN_NUMBER_SEPARATOR) {
-                    $this->fragmentLine->setLineNumber($this->lineNumber);
-                    $this->lineNumber = null;
-                    $this->setCurrentState(self::STATE_LOCATING_COLUMN_NUMBER);
-                }
-                
-                $this->incrementCurrentCharacterPointer();                
-                
-                break;
-            
-            case self::STATE_LOCATING_COLUMN_NUMBER:
-                if (ctype_digit($this->getCurrentCharacter())) {
-                    $this->setCurrentState(self::STATE_READING_COLUMN_NUMBER);
-                } else {
-                    $this->incrementCurrentCharacterPointer();
-                }                
-                
-                break;
-            
-            case self::STATE_READING_COLUMN_NUMBER:                
-                if (ctype_digit($this->getCurrentCharacter())) {
-                    $this->columnNumber .= $this->getCurrentCharacter();
-                }                
-                
-                if ($this->isCurrentCharacterLastCharacter()) {
-                    $this->fragmentLine->setColumnNumber($this->columnNumber);
-                    $this->columnNumber = null;
-                    $this->setCurrentState(self::STATE_COMPLETE);
-                }
-                
-                $this->incrementCurrentCharacterPointer();
-                
-                break;            
+    
+    /**
+     * 
+     * @param string $fragmentLine
+     * @return boolean
+     */
+    public function parse($fragmentLine) {
+        $fragmentCoordinatesSeparatorPosition = $this->findFragmentCoordinatesSeparatorPosition($fragmentLine);
+        
+        if (!is_int($fragmentCoordinatesSeparatorPosition)) {
+            return false;
         }
+        
+        $coordinatesParts = explode(self::LINE_NUMBER_COLUMN_NUMBER_SEPARATOR, substr($fragmentLine, $fragmentCoordinatesSeparatorPosition));
+        
+        if (count($coordinatesParts) != 2) {
+            return false;
+        }
+        
+        $lineNumber = str_replace('// Line ', '', $coordinatesParts[0]);
+        if (!ctype_digit($lineNumber)) {
+            return false;
+        }        
+        
+        $columnNumber = str_replace(' Pos ', '', $coordinatesParts[1]);
+        if (!ctype_digit($columnNumber)) {
+            return false;
+        }
+        
+        $this->fragmentLine = new FragmentLine();
+        $this->fragmentLine->setLineNumber($lineNumber);
+        $this->fragmentLine->setColumnNumber($columnNumber);
+        $this->fragmentLine->setFragment(substr($fragmentLine, 0, $fragmentCoordinatesSeparatorPosition - 1));
+        
+        $this->hasParsedValidFragmentLine = true;
+        return true;
+    }
+    
+    
+    /**
+     * 
+     * @param string $fragmentLine
+     * @return int
+     */
+    private function findFragmentCoordinatesSeparatorPosition($fragmentLine) {
+        $lineLength = strlen($fragmentLine);        
+        $currentCharacter = '';
+        $previousCharacter = '';
+        
+        $fragmentCoordinates = '';
+        
+        for ($characterIndex = $lineLength - 1; $characterIndex >= 0; $characterIndex--) {
+            $currentCharacter = $fragmentLine[$characterIndex];
+            $fragmentCoordinates = $currentCharacter . $fragmentCoordinates;
+            
+            if ($characterIndex < $lineLength - 1) {
+                $previousCharacter = $fragmentLine[$characterIndex + 1];
+            }           
+            
+            if ($currentCharacter . $previousCharacter == self::FRAGMENT_COORDINATES_SEPARATOR) {
+                return $characterIndex;
+            }
+        }    
+        
+        return null;
     }
     
     
@@ -143,8 +113,6 @@ class Parser extends StringParser {
      * @return boolean
      */
     public function hasParsedValidFragmentLine() {
-        return $this->getCurrentState() == self::STATE_COMPLETE;        
-    }
-    
-    
+        return $this->hasParsedValidFragmentLine;
+    }    
 }

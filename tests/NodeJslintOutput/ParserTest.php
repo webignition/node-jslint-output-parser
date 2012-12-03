@@ -51,6 +51,20 @@ class ParserTest extends BaseTest {
         $this->assertEquals(95, $nodeJsLintOutput->getPercentScanned());
         $this->assertEquals(101, $nodeJsLintOutput->getEntryCount());
         $this->assertTrue($nodeJsLintOutput->hasTooManyErrors());
-    }      
+    } 
+    
+    
+    public function testParseLargeOutput() {
+        $output = $this->getFixture('LargeOutput.txt');
+        
+        $parser = new Parser();
+        $parser->parse($output);
+        
+        $nodeJsLintOutput = $parser->getNodeJsLintOutput();
+        
+        $this->assertNotNull($nodeJsLintOutput);
+        $this->assertEquals(51, $nodeJsLintOutput->getEntryCount());
+        $this->assertEquals(50, $nodeJsLintOutput->getPercentScanned());
+    }    
     
 }

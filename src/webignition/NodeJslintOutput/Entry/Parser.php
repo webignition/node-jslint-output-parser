@@ -24,17 +24,17 @@ class Parser {
      * @param string $rawEntry
      * @return boolean
      */
-    public function parse($rawEntry) {
+    public function parse($rawEntry) {        
         if (!is_string($rawEntry)) {
             return false;
         }
         
-        $entryLines = explode("\n", trim($rawEntry));
+        $entryLines = explode("\n", trim($rawEntry));        
         
         if (count($entryLines) != 2) {
             return false;
-        }        
-        
+        }
+                
         $headerLineParser = new HeaderLineParser();        
         $headerLineParser->parse($entryLines[0]);
         
@@ -43,11 +43,11 @@ class Parser {
         }
         
         $fragmentLineParser = new FragmentLineParser();
-        $fragmentLineParser->parse(substr($entryLines[1], 4));
+        $fragmentLineParser->parse(substr($entryLines[1], 4));          
         
         if (!$fragmentLineParser->hasParsedValidFragmentLine()) {
             return false;
-        }
+        }        
         
         $this->entry = new \webignition\NodeJslintOutput\Entry\Entry();
         $this->entry->setHeaderLine($headerLineParser->getHeaderLine());

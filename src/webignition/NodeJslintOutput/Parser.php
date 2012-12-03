@@ -39,7 +39,7 @@ class Parser {
             return false;
         }        
         
-        $rawOutputLines = explode("\n", trim($rawOutput));
+        $rawOutputLines = explode("\n", trim($rawOutput));        
         
         if (count($rawOutputLines) == 0) {
             return false;
@@ -51,7 +51,7 @@ class Parser {
         } else {
             $statusLine = $rawOutputLines[0];
             $entryLines = array_slice($rawOutputLines, 1);
-        }
+        }        
         
         if ($this->isLineOkStatusLine($statusLine)) {
             $this->nodeJsLintOutput = new NodeJslintOutput();
@@ -70,10 +70,13 @@ class Parser {
             } else {
                 $currentRawEntry .= "\n" . $entryLine;                
                 $entryParser->parse($currentRawEntry);                
+                //return;
                 $this->nodeJsLintOutput->addEntry($entryParser->getEntry());
                 $currentRawEntry = '';                
             }
         }
+        
+        //return;
         
         return true;
     }    
