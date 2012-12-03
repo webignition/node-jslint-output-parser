@@ -55,6 +55,7 @@ class Parser {
         
         if ($this->isLineOkStatusLine($statusLine)) {
             $this->nodeJsLintOutput = new NodeJslintOutput();
+            $this->nodeJsLintOutput->setStatusLine($statusLine);
             return true;
         }
         

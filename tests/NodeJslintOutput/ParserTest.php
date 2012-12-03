@@ -19,6 +19,7 @@ class ParserTest extends BaseTest {
         $this->assertNotNull($nodeJsLintOutput);
         $this->assertEquals(0, $nodeJsLintOutput->getEntryCount());
         $this->assertEquals(100, $nodeJsLintOutput->getPercentScanned());
+        $this->assertEquals('/home/example/source.js is OK', $nodeJsLintOutput->getStatusLine());
     }
     
     
@@ -35,6 +36,7 @@ class ParserTest extends BaseTest {
         $this->assertEquals(4, $nodeJsLintOutput->getPercentScanned());
         $this->assertEquals(38, $nodeJsLintOutput->getEntryCount());
         $this->assertTrue($nodeJsLintOutput->wasStopped());
+        $this->assertEquals('/home/example/source.js', $nodeJsLintOutput->getStatusLine());
     }     
     
     
@@ -51,6 +53,7 @@ class ParserTest extends BaseTest {
         $this->assertEquals(95, $nodeJsLintOutput->getPercentScanned());
         $this->assertEquals(101, $nodeJsLintOutput->getEntryCount());
         $this->assertTrue($nodeJsLintOutput->hasTooManyErrors());
+        $this->assertEquals('/home/example/example.js', $nodeJsLintOutput->getStatusLine());        
     } 
     
     
@@ -65,6 +68,7 @@ class ParserTest extends BaseTest {
         $this->assertNotNull($nodeJsLintOutput);
         $this->assertEquals(51, $nodeJsLintOutput->getEntryCount());
         $this->assertEquals(50, $nodeJsLintOutput->getPercentScanned());
+        $this->assertEquals('/tmp/3d1ad92fdd42a23f7a6890e9171081c4', $nodeJsLintOutput->getStatusLine());        
     }    
     
 }
