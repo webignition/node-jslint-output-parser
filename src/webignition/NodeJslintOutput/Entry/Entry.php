@@ -70,5 +70,17 @@ class Entry {
     }
     
     
+    /**
+     * 
+     * @return string
+     */
+    public function __toArray() {
+        return array(
+            'headerLine' => $this->getHeaderLine()->__toArray(),
+            'fragmentLine' => $this->getFragmentLine()->__toArray()
+        );
+    }
+    
+    
     
 }

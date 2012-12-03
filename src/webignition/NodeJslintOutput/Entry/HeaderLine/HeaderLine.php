@@ -69,5 +69,17 @@ class HeaderLine {
     public function __toString() {
         return '#'.$this->getErrorNumber().' '.$this->getErrorMessage();
     }
+
+
+    /**
+     * 
+     * @return array
+     */
+    public function __toArray() {
+        return array(
+            'errorNumber' => $this->getErrorNumber(),
+            'errorMessage' => $this->getErrorMessage()
+        );
+    }
     
 }

@@ -94,4 +94,16 @@ class FragmentLine {
     public function __toString() {
         return $this->getFragment().' // Line '.$this->getLineNumber().', Pos '.$this->getColumnNumber();
     }
+    
+    /**
+     * 
+     * @return string
+     */
+    public function __toArray() {
+        return array(
+            'fragment' => $this->getFragment(),            
+            'lineNumber' => $this->getLineNumber(),
+            'columnNumber' => $this->getColumnNumber()
+        );
+    }    
 }

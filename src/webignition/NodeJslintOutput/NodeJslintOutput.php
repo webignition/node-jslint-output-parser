@@ -153,6 +153,20 @@ class NodeJslintOutput {
     }
     
     
+    public function __toArray() {
+        $array = array(
+            'statusLine' => $this->getStatusLine(),
+            'entries' => array()
+        );
+        
+        $entries = $this->getEntries();
+        foreach ($entries as $entry) {
+            $array['entries'][] = $entry->__toArray();
+        }
+        
+        return $array;
+    }
+    
     
     
 }
