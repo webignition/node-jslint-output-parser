@@ -55,8 +55,7 @@ class Parser {
             return false;
         }
         
-        $nodeJsLintOutputObject = json_decode(trim($rawOutput));
-        
+        $nodeJsLintOutputObject = json_decode(trim($rawOutput));        
         if (!is_array($nodeJsLintOutputObject)) {
             return false;
         }
@@ -83,66 +82,15 @@ class Parser {
         if (count($entries) === 0) {
             return true;
         }
-        
+
         $entryParser = new EntryParser();
         
         foreach ($entries as $entryObject) {
-            $entryParser->parse($entryObject);
-            $this->nodeJsLintOutput->addEntry($entryParser->getEntry());
-            
-            //var_dump($entryObject);
-            exit();
-        }
-        
-        var_dump($statusLine, count($entries));
-        exit();
-        
-//        $rawOutputLines = explode("\n", trim($rawOutput));        
-//        
-//        if (count($rawOutputLines) == 0) {
-//            return false;
-//        }
-//        
-//        if ($this->isEntryFragmentLine($rawOutputLines[0])) {
-//            $statusLine = '';
-//            $entryLines = $rawOutputLines;
-//        } else {
-//            $statusLine = $rawOutputLines[0];
-//            $entryLines = array_slice($rawOutputLines, 1);
-//        }        
-//        
-//        if ($this->isLineOkStatusLine($statusLine)) {
-//            $this->nodeJsLintOutput = new NodeJslintOutput();
-//            $this->nodeJsLintOutput->setStatusLine($statusLine);
-//            return true;
-//        }
-//        
-//        $this->nodeJsLintOutput = new NodeJslintOutput();
-//        $this->nodeJsLintOutput->setStatusLine($statusLine);
-//        
-//        return true;
-        
-        $entryParser = new EntryParser();        
-        
-        $currentRawEntry = '';
-        foreach ($entryLines as $entryLineIndex => $entryLine) {
-            if ($entryLineIndex % 2 == 0) {
-                $currentRawEntry .= $entryLine;
-            } else {
-                $currentRawEntry .= "\n" . $entryLine;                
-                $entryParser->parse($currentRawEntry);                
-                
-                $entry = $entryParser->getEntry();
-                
-                var_dump($currentRawEntry);
-                
-                //return;
-                $this->nodeJsLintOutput->addEntry($entry);
-                $currentRawEntry = '';                
+            if (!is_null($entryObject)) {
+                $entryParser->parse($entryObject);
+                $this->nodeJsLintOutput->addEntry($entryParser->getEntry());                
             }
         }
-        
-        //return;
         
         return true;
     }    
@@ -155,40 +103,6 @@ class Parser {
     public function getNodeJsLintOutput() {
         return $this->nodeJsLintOutput;
     }
-    
-    
-    /**
-     * 
-     * @param string $line
-     * @return boolean
-     */
-    private function isEntryFragmentLine($line) {
-        $parser = new FragmentLineParser();
-        $parser->parse($line);
-        
-        return $parser->hasParsedValidFragmentLine();
-    }
-    
-    
-    //private function is
-    
-    
-    /**
-     * 
-     * @param string $line
-     * @return boolean
-     */
-    private function isLineOkStatusLine($line) {
-        if ($this->isEntryFragmentLine($line)) {
-            return false;
-        }
-        
-        if ($this->isEntryFragmentLine($line)) {
-            return false;
-        }
-        
-        return preg_match('/is OK$/', $line) > 0;
-    } 
     
     
 }

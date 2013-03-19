@@ -114,19 +114,23 @@ class NodeJslintOutput {
      * @return int
      */
     public function getPercentScanned() {
-        foreach ($this->entries as $entry) {
+        foreach ($this->entries as $entry) {            
             /* @var $entry Entry */
+            
+
             if ($this->isStoppingEntry($entry)) {
                 $percentStringMatches = array();                
-                preg_match("/[0-9]{1,2}\%/", $entry, $percentStringMatches);                
+                preg_match("/[0-9]{1,2}\%/", $entry->getReason(), $percentStringMatches);                
                 return str_replace('%', '', $percentStringMatches[0]);
             }
 
             if ($this->isTooManyErrorsEntry($entry)) {
                 $percentStringMatches = array();                
-                preg_match("/[0-9]{1,2}\%/", $entry, $percentStringMatches);                
+                preg_match("/[0-9]{1,2}\%/", $entry->getReason(), $percentStringMatches);                
                 return str_replace('%', '', $percentStringMatches[0]);
-            }            
+            }
+
+                        
         }
         
         return 100;
@@ -138,8 +142,8 @@ class NodeJslintOutput {
      * @param \webignition\NodeJslintOutput\Entry\Entry $entry
      * @return boolean
      */
-    private function isStoppingEntry(Entry $entry) {
-        return preg_match("/Stopping\.  \([0-9]{1,2}\% scanned\)\./", $entry->getHeaderLine()->getErrorMessage()) > 0;
+    private function isStoppingEntry(Entry $entry) {        
+        return preg_match("/Stopping\.  \([0-9]{1,2}\% scanned\)\./", $entry->getReason()) > 0;
     }
     
     
@@ -148,8 +152,8 @@ class NodeJslintOutput {
      * @param \webignition\NodeJslintOutput\Entry\Entry $entry
      * @return boolean
      */
-    private function isTooManyErrorsEntry(Entry $entry) {
-        return preg_match("/Too many errors\. \([0-9]{1,2}\% scanned\)\./", $entry->getHeaderLine()->getErrorMessage()) > 0;
+    private function isTooManyErrorsEntry(Entry $entry) {        
+        return preg_match("/Too many errors\. \([0-9]{1,2}\% scanned\)\./", $entry->getReason()) > 0;
     }
     
     

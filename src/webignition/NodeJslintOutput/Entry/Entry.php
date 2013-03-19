@@ -39,6 +39,12 @@ class Entry {
     
     /**
      *
+     * @var string
+     */
+    private $reason;
+    
+    /**
+     *
      * @var array
      */
     private $parameters = array();
@@ -127,6 +133,24 @@ class Entry {
     
     /**
      * 
+     * @param string $reason
+     */
+    public function setReason($reason) {
+        $this->reason = $reason;
+    }
+    
+    
+    /**
+     * 
+     * @return string
+     */
+    public function getReason() {
+        return $this->reason;
+    }
+    
+    
+    /**
+     * 
      * @param array $parameters
      */
     public function setParameters($parameters = array()) {
@@ -149,26 +173,6 @@ class Entry {
      */
     public function hasParameters() {
         return count($this->getParameters()) > 0;
-    }
-    
-    
-    /**
-     * 
-     * @return string
-     */
-    public function getReason() {
-        if (!$this->hasParameters()) {
-            return $this->getRaw();
-        }
-        
-        $parameterPlaceholders = array();
-        $parameterValues = array();
-        foreach ($this->getParameters() as $parameterName => $parameterValue) {
-            $parameterPlaceholders[] = '{'.$parameterName.'}';
-            $parameterValues[] = $parameterValue;
-        }
-        
-        return str_replace($parameterPlaceholders, $parameterValues, $this->getRaw());
     }    
     
     
