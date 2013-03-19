@@ -1,16 +1,27 @@
 <?php
 namespace webignition\NodeJslintOutput\Entry;
 
-use webignition\NodeJslintOutput\Entry\HeaderLine\Parser as HeaderLineParser;
-use webignition\NodeJslintOutput\Entry\FragmentLine\Parser as FragmentLineParser;
-use webignition\NodeJslintOutput\Entry\HeaderLine\HeaderLine;
-use webignition\NodeJslintOutput\Entry\FragmentLine\FragmentLine;
+use webignition\NodeJslintOutput\Entry\Entry;
 
-/**
- * #3 Combine this with the previous 'var' statement.
- *    var setCompletionPercentValue = function () { // Line 7, Pos 9
- */
-class Parser {
+class Parser {    
+    const ID_PROPERTY_NAME = 'id';
+    const RAw_PROPERTY_NAME = 'raw';
+    const EVIDENCE_PROPERTY_NAME = 'evidence';
+    const LINE_PROPERTY_NAME = 'line';
+    const CHARACTER_PROPERTY_NAME = 'character';
+    
+    /**
+     * Collection of required property names
+     * 
+     * @var array
+     */
+    private $requiredProperties = array(
+        self::ID_PROPERTY_NAME,
+        self::RAw_PROPERTY_NAME,
+        self::EVIDENCE_PROPERTY_NAME,
+        self::LINE_PROPERTY_NAME,
+        self::CHARACTER_PROPERTY_NAME
+    );
     
     /**
      *
@@ -21,40 +32,64 @@ class Parser {
     
     /**
      * 
-     * @param string $rawEntry
+     * @param \stdClass $rawEntry
      * @return boolean
      */
-    public function parse($rawEntry) {        
-        if (!is_string($rawEntry)) {
-            return false;
+    public function parse(\stdClass $rawEntryObject) {
+        foreach ($this->requiredProperties as $requiredPropertyName) {
+            if (!isset($rawEntryObject->$requiredPropertyName)) {
+                throw new ParserException('Missing required property "'.$requiredPropertyName.'"', 1);
+            }
         }
+ 
+        $this->entry = new Entry();
+        $this->entry->setId($rawEntryObject->{self::ID_PROPERTY_NAME});
+        $this->entry->setRaw($rawEntryObject->{self::RAw_PROPERTY_NAME});
+        $this->entry->setEvidence($rawEntryObject->{self::EVIDENCE_PROPERTY_NAME});
+        $this->entry->setLineNumber((int)$rawEntryObject->{self::LINE_PROPERTY_NAME});
+        $this->entry->setColumnNumber((int)$rawEntryObject->{self::CHARACTER_PROPERTY_NAME});
         
-        $entryLines = explode("\n", trim($rawEntry));        
         
-        if (count($entryLines) != 2) {
-            return false;
-        }
+        if ($this->expectsParameters($rawEntryObject->{self::RAw_PROPERTY_NAME})) {
+            $expectedParameterNames = $this->getExpectedParameterNames($rawEntryObject->{self::RAw_PROPERTY_NAME});
+            $parameters = array();
+            foreach ($expectedParameterNames as $expectedParameterName) {
+                if (!isset($rawEntryObject->$expectedParameterName)) {
+                    throw new ParserException('Missing expected parameter "'.$expectedParameterName.'"', 2);
+                }                
                 
-        $headerLineParser = new HeaderLineParser();        
-        $headerLineParser->parse($entryLines[0]);
-        
-        if (!$headerLineParser->hasParsedValidHeaderLine()) {
-            return false;
+                $parameters[$expectedParameterName] = $rawEntryObject->$expectedParameterName;
+            }
+            
+            $this->entry->setParameters($parameters);
         }
-        
-        $fragmentLineParser = new FragmentLineParser();
-        $fragmentLineParser->parse(substr($entryLines[1], 4));          
-        
-        if (!$fragmentLineParser->hasParsedValidFragmentLine()) {
-            return false;
-        }        
-        
-        $this->entry = new \webignition\NodeJslintOutput\Entry\Entry();
-        $this->entry->setHeaderLine($headerLineParser->getHeaderLine());
-        $this->entry->setFragmentLine($fragmentLineParser->getFragmentLine());
         
         return true;
-    }  
+    } 
+    
+    
+    private function expectsParameters($rawLine) {
+        return $this->getExpectedParameterCount($rawLine) > 0;
+    }
+    
+    
+    private function getExpectedParameterCount($rawLine) {
+        return count($this->getExpectedParameterNames($rawLine));
+    }
+    
+    
+    private function getExpectedParameterNames($rawLine) {        
+        $matches = array();
+        preg_match_all('/{[a-z]}/', $rawLine, $matches);
+        
+        $expectedParameterNames = array();
+        
+        foreach ($matches[0] as $parameterNameMatch) {
+            $expectedParameterNames[] = substr($parameterNameMatch, 1, strlen($parameterNameMatch) - 2);
+        }
+        
+        return $expectedParameterNames;       
+    }
     
     
     /**

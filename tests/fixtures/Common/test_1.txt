@@ -1,0 +1,102 @@
+/tmp/c7ec8735032f1694b5783a2cc70f7150:1:1363689758.136
+ #1 Expected 'Niets van deze web site mag worden verveelvoudigd en/of
+' at column 9, not column 8.
+    "Niets van deze web site mag worden verveelvoudigd en/of \n" + // Line 3, Pos 8
+ #2 Expected 'openbaar gemaakt door middel van druk, fotokopie, microfilm
+' at column 9, not column 8.
+    "openbaar gemaakt door middel van druk, fotokopie, microfilm \n" + // Line 4, Pos 8
+ #3 Expected 'of op welke andere wijze ook, zonder voorafgaande schriftelijke
+' at column 9, not column 8.
+    "of op welke andere wijze ook, zonder voorafgaande schriftelijke \n" + // Line 5, Pos 8
+ #4 Expected 'toestemming van de auteur of uitgever.' at column 9, not column 8.
+    "toestemming van de auteur of uitgever." + // Line 6, Pos 8
+ #5 Expected '
+
+No part of this site may be reproduced or published
+' at column 9, not column 8.
+    "\n\nNo part of this site may be reproduced or published \n" + // Line 7, Pos 8
+ #6 Expected 'in any form, by print, photoprint, microfilm or any other means,
+' at column 9, not column 8.
+    "in any form, by print, photoprint, microfilm or any other means, \n" + // Line 8, Pos 8
+ #7 Expected 'without written permission from the author or publisher.' at column 9, not column 8.
+    "without written permission from the author or publisher."; // Line 9, Pos 8
+ #8 'document' was used before it was defined.
+    if (document.layers) document.captureEvents(Event.MOUSEDOWN); // Line 10, Pos 5
+ #9 Expected '{' and instead saw 'document'.
+    if (document.layers) document.captureEvents(Event.MOUSEDOWN); // Line 10, Pos 22
+#10 Expected 'document' at column 1, not column 22.
+    if (document.layers) document.captureEvents(Event.MOUSEDOWN); // Line 10, Pos 22
+#11 'Event' was used before it was defined.
+    if (document.layers) document.captureEvents(Event.MOUSEDOWN); // Line 10, Pos 45
+#12 Unexpected '(space)'.
+    if (document.layers) document.captureEvents(Event.MOUSEDOWN); // Line 10, Pos 62
+#13 Missing 'use strict' statement.
+    var but = 0; // Line 12, Pos 3
+#14 Expected 'var' at column 5, not column 3.
+    var but = 0; // Line 12, Pos 3
+#15 Expected 'if' at column 5, not column 3.
+    if (document.layers)	{ // Line 13, Pos 3
+#16 Expected exactly one space between ')' and '{'.
+    if (document.layers)	{ // Line 13, Pos 27
+#17 Expected 'but' at column 9, not column 5.
+    but = e.which; // Line 14, Pos 5
+#18 Expected 'if' at column 9, not column 5.
+    if ((but & 2) == 2) { // Line 15, Pos 5
+#19 Unexpected '&'.
+    if ((but & 2) == 2) { // Line 15, Pos 14
+#20 Expected '===' and instead saw '=='.
+    if ((but & 2) == 2) { // Line 15, Pos 19
+#21 Expected 'alert' at column 13, not column 7.
+    alert(message); // Line 16, Pos 7
+#22 'alert' was used before it was defined.
+    alert(message); // Line 16, Pos 7
+#23 Expected 'return' at column 13, not column 7.
+    return false; // Line 17, Pos 7
+#24 Expected '}' at column 9, not column 5.
+    } // Line 18, Pos 5
+#25 Expected '}' at column 5, not column 3.
+    } else { // Line 19, Pos 3
+#26 Expected 'but' at column 9, not column 5.
+    but = event.button; // Line 20, Pos 5
+#27 'event' was used before it was defined.
+    but = event.button; // Line 20, Pos 11
+#28 Expected 'if' at column 9, not column 5.
+    if ((but & 2) == 2) { // Line 21, Pos 5
+#29 Unexpected '&'.
+    if ((but & 2) == 2) { // Line 21, Pos 14
+#30 Expected '===' and instead saw '=='.
+    if ((but & 2) == 2) { // Line 21, Pos 19
+#31 Expected 'event' at column 13, not column 7.
+    event.cancelBubble = true // Line 22, Pos 7
+#32 Expected ';' and instead saw 'event'.
+    event.cancelBubble = true // Line 22, Pos 32
+#33 Expected 'event' at column 13, not column 7.
+    event.returnValue = false; // Line 23, Pos 7
+#34 Expected 'alert' at column 13, not column 7.
+    alert(message); // Line 24, Pos 7
+#35 'alert' was used before it was defined.
+    alert(message); // Line 24, Pos 7
+#36 Expected 'return' at column 13, not column 7.
+    return false; // Line 25, Pos 7
+#37 Expected '}' at column 9, not column 5.
+    } // Line 26, Pos 5
+#38 Expected '}' at column 5, not column 3.
+    }	 // Line 27, Pos 3
+#39 Unexpected '(space)'.
+    }	 // Line 27, Pos 4
+#40 Missing 'use strict' statement.
+    event.cancelBubble = true; // Line 30, Pos 3
+#41 Expected 'event' at column 5, not column 3.
+    event.cancelBubble = true; // Line 30, Pos 3
+#42 'event' was used before it was defined.
+    event.cancelBubble = true; // Line 30, Pos 3
+#43 Expected 'event' at column 5, not column 3.
+    event.returnValue = false; // Line 31, Pos 3
+#44 Expected 'alert' at column 5, not column 3.
+    alert(message); // Line 32, Pos 3
+#45 'alert' was used before it was defined.
+    alert(message); // Line 32, Pos 3
+#46 Expected 'return' at column 5, not column 3.
+    return false; // Line 33, Pos 3
+#47 Unexpected '(space)'.
+    document.onmousedown = norightclick; // Line 35, Pos 37

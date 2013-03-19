@@ -1,1 +1,1 @@
-/home/example/source.js is OK
+["/home/example/source.js",[]]

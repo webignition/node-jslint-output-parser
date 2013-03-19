@@ -21,12 +21,28 @@ use webignition\NodeJslintOutput\Entry\FragmentLine\Parser as FragmentLineParser
  * 
  */
 class Parser {
+    const EXPECTED_NODE_JSLINT_OUTPUT_OBJECT_COUNT = 2; 
+    
     
     /**
      *
      * @var NodeJslintOutput
      */
     private $nodeJsLintOutput = null;
+    
+    
+//    /**
+//     *
+//     * @var \stdClass
+//     */
+//    private $nodeJsLintOutputObject = null;
+    
+    
+    /**
+     *
+     * @var array
+     */
+    private $nodeJsLintEntries = array();
     
     
     /**
@@ -37,30 +53,74 @@ class Parser {
     public function parse($rawOutput) {
         if (!is_string($rawOutput)) {
             return false;
-        }        
+        }
         
-        $rawOutputLines = explode("\n", trim($rawOutput));        
+        $nodeJsLintOutputObject = json_decode(trim($rawOutput));
         
-        if (count($rawOutputLines) == 0) {
+        if (!is_array($nodeJsLintOutputObject)) {
             return false;
         }
         
-        if ($this->isEntryFragmentLine($rawOutputLines[0])) {
-            $statusLine = '';
-            $entryLines = $rawOutputLines;
-        } else {
-            $statusLine = $rawOutputLines[0];
-            $entryLines = array_slice($rawOutputLines, 1);
-        }        
-        
-        if ($this->isLineOkStatusLine($statusLine)) {
-            $this->nodeJsLintOutput = new NodeJslintOutput();
-            $this->nodeJsLintOutput->setStatusLine($statusLine);
-            return true;
+        if (count($nodeJsLintOutputObject) !== self::EXPECTED_NODE_JSLINT_OUTPUT_OBJECT_COUNT) {
+            return false;
         }
+        
+        $statusLine = $nodeJsLintOutputObject[0];
+        if (!is_string($statusLine)) {
+            return false;
+        }
+        
+        if (!is_array($nodeJsLintOutputObject[1])) {
+            return false;
+        }
+        
+        $this->nodeJsLintEntries = $nodeJsLintOutputObject[1];
         
         $this->nodeJsLintOutput = new NodeJslintOutput();
         $this->nodeJsLintOutput->setStatusLine($statusLine);
+        
+        $entries = $nodeJsLintOutputObject[1];
+        if (count($entries) === 0) {
+            return true;
+        }
+        
+        $entryParser = new EntryParser();
+        
+        foreach ($entries as $entryObject) {
+            $entryParser->parse($entryObject);
+            $this->nodeJsLintOutput->addEntry($entryParser->getEntry());
+            
+            //var_dump($entryObject);
+            exit();
+        }
+        
+        var_dump($statusLine, count($entries));
+        exit();
+        
+//        $rawOutputLines = explode("\n", trim($rawOutput));        
+//        
+//        if (count($rawOutputLines) == 0) {
+//            return false;
+//        }
+//        
+//        if ($this->isEntryFragmentLine($rawOutputLines[0])) {
+//            $statusLine = '';
+//            $entryLines = $rawOutputLines;
+//        } else {
+//            $statusLine = $rawOutputLines[0];
+//            $entryLines = array_slice($rawOutputLines, 1);
+//        }        
+//        
+//        if ($this->isLineOkStatusLine($statusLine)) {
+//            $this->nodeJsLintOutput = new NodeJslintOutput();
+//            $this->nodeJsLintOutput->setStatusLine($statusLine);
+//            return true;
+//        }
+//        
+//        $this->nodeJsLintOutput = new NodeJslintOutput();
+//        $this->nodeJsLintOutput->setStatusLine($statusLine);
+//        
+//        return true;
         
         $entryParser = new EntryParser();        
         
@@ -71,8 +131,13 @@ class Parser {
             } else {
                 $currentRawEntry .= "\n" . $entryLine;                
                 $entryParser->parse($currentRawEntry);                
+                
+                $entry = $entryParser->getEntry();
+                
+                var_dump($currentRawEntry);
+                
                 //return;
-                $this->nodeJsLintOutput->addEntry($entryParser->getEntry());
+                $this->nodeJsLintOutput->addEntry($entry);
                 $currentRawEntry = '';                
             }
         }
@@ -103,6 +168,9 @@ class Parser {
         
         return $parser->hasParsedValidFragmentLine();
     }
+    
+    
+    //private function is
     
     
     /**

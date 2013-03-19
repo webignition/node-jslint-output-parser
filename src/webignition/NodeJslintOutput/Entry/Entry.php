@@ -1,63 +1,154 @@
 <?php
 namespace webignition\NodeJslintOutput\Entry;
 
-use webignition\NodeJslintOutput\Entry\HeaderLine\HeaderLine;
-use webignition\NodeJslintOutput\Entry\FragmentLine\FragmentLine;
-
 /**
  * An entry in a nodejs-lint output
- * An entry is comprised of a header line and a fragment line
- * 
- * Example raw entry:
- * #3 Combine this with the previous 'var' statement.
- *    var setCompletionPercentValue = function () { // Line 7, Pos 9
  */
-class Entry {
-    
-    /**
-     *
-     * @var HeaderLine
-     */
-    private $headerLine = null;
+class Entry { 
     
     
     /**
      *
-     * @var FragmentLine
+     * @var string
      */
-    private $fragmentLine = null;
+    private $id;
+    
+    /**
+     *
+     * @var string
+     */
+    private $raw;
+    
+    /**
+     *
+     * @var string
+     */
+    private $evidence;
+    
+    /**
+     *
+     * @var int
+     */
+    private $lineNumber;
+    
+    /**
+     *
+     * @var int
+     */
+    private $columnNumber;
+    
+    /**
+     *
+     * @var array
+     */
+    private $parameters = array();
     
     
     /**
      * 
-     * @param \webignition\NodeJslintOutput\Entry\HeaderLine\HeaderLine $headerLine
+     * @param string $id
      */
-    public function setHeaderLine(HeaderLine $headerLine) {
-        $this->headerLine = $headerLine;
+    public function setId($id) {
+        $this->id = $id;
     }
     
     /**
      * 
-     * @return HeaderLine
+     * @return string
      */
-    public function getHeaderLine() {
-        return $this->headerLine;
+    public function getId() {
+        return $this->id;
     }
     
     /**
      * 
-     * @param \webignition\NodeJslintOutput\Entry\FragmentLine\FragmentLine $fragmentLine
+     * @param string $raw
      */
-    public function setFragmentLine(FragmentLine $fragmentLine) {
-        $this->fragmentLine = $fragmentLine;
+    public function setRaw($raw) {
+        $this->raw = $raw;
     }
     
     /**
      * 
-     * @return FragmentLine
+     * @return string
      */
-    public function getFragmentLine() {
-        return $this->fragmentLine;
+    public function getRaw() {
+        return $this->raw;
+    }    
+    
+    /**
+     * 
+     * @param string $evidence
+     */
+    public function setEvidence($evidence) {
+        $this->evidence = $evidence;
+    }    
+    
+    /**
+     * 
+     * @return string
+     */
+    public function getEvidence() {
+        return $this->evidence;
+    }
+    
+    /**
+     * 
+     * @param int $lineNumber
+     */
+    public function setLineNumber($lineNumber) {
+        $this->lineNumber = $lineNumber;
+    }    
+    
+    /**
+     * 
+     * @return int
+     */
+    public function getLineNumber() {
+        return $this->lineNumber;
+    }    
+    
+    /**
+     * 
+     * @param int $lineNumber
+     */    
+    public function setColumnNumber($columnNumber) {
+        $this->columnNumber = $columnNumber;
+    }
+    
+    /**
+     * 
+     * @return int
+     */    
+    public function getColumnNumber() {
+        return $this->columnNumber;
+    }
+    
+    
+    /**
+     * 
+     * @param array $parameters
+     */
+    public function setParameters($parameters = array()) {
+        $this->parameters = $parameters;
+    }
+    
+    
+    /**
+     * 
+     * @return array
+     */
+    public function getParameters() {
+        return $this->parameters;
+    }
+    
+    
+    /**
+     * 
+     * @return boolean
+     */
+    public function hasParameters() {
+        return count($this->getParameters()) > 0;
     }
     
     
@@ -65,22 +156,20 @@ class Entry {
      * 
      * @return string
      */
-    public function __toString() {
-        return $this->getHeaderLine() . "\n" . $this->getFragmentLine();
-    }
-    
-    
-    /**
-     * 
-     * @return string
-     */
-    public function __toArray() {
-        return array(
-            'headerLine' => $this->getHeaderLine()->__toArray(),
-            'fragmentLine' => $this->getFragmentLine()->__toArray()
-        );
-    }
-    
+    public function getReason() {
+        if (!$this->hasParameters()) {
+            return $this->getRaw();
+        }
+        
+        $parameterPlaceholders = array();
+        $parameterValues = array();
+        foreach ($this->getParameters() as $parameterName => $parameterValue) {
+            $parameterPlaceholders[] = '{'.$parameterName.'}';
+            $parameterValues[] = $parameterValue;
+        }
+        
+        return str_replace($parameterPlaceholders, $parameterValues, $this->getRaw());
+    }    
     
     
 }

@@ -9,21 +9,40 @@ class EntryParserTest extends BaseTest {
     }       
     
     public function testParseEntry() {
-        $rawEntry = " #6 Expected '!==' and instead saw '!='.
-    if (completionPercentValue.text() != latestTestData.completion_percent) { // Line 10, Pos 43";
+        $jsonEntry = '
+        {
+            "id":"(error)",
+            "raw":"Expected \'{a}\' at column {b}, not column {c}.",
+            "evidence":"       \"Niets van deze web site mag worden verveelvoudigd en/of \\n\" +",
+            "line":3,
+            "character":8,
+            "a":"Niets van deze web site mag worden verveelvoudigd en/of \n",
+            "b":9,
+            "c":8,
+            "reason":"Expected \'Niets van deze web site mag worden verveelvoudigd en/of \n\' at column 9, not column 8."
+        }';
+        
+        $entryObject = json_decode(trim($jsonEntry));     
         
         $parser = new EntryParser();
-        $parser->parse($rawEntry);
+        $parser->parse($entryObject);
         
-        $this->assertTrue($parser->parse($rawEntry));
+        $this->assertTrue($parser->parse($entryObject));
         
         $entry = $parser->getEntry();
-        $this->assertNotNull($entry);
+        $this->assertInstanceOf('webignition\NodeJslintOutput\Entry\Entry', $entry);
         
-        $rawEntryLines = explode("\n", $rawEntry);
-        $trimmedRawEntry = trim($rawEntryLines[0]) . "\n" . trim($rawEntryLines[1]);
-        
-        $this->assertEquals($trimmedRawEntry, (string)$entry);
+        $this->assertEquals('(error)', $entry->getId());
+        $this->assertEquals('Expected \'{a}\' at column {b}, not column {c}.', $entry->getRaw());
+        $this->assertEquals("       \"Niets van deze web site mag worden verveelvoudigd en/of \n\" +", $entry->getEvidence());
+        $this->assertEquals(3, $entry->getLineNumber());
+        $this->assertEquals(8, $entry->getColumnNumber());
+        $this->assertEquals(array(
+            'a' => "Niets van deze web site mag worden verveelvoudigd en/of \n",
+            'b' => 9,
+            'c' => 8,
+        ), $entry->getParameters());
+        $this->assertEquals("Expected 'Niets van deze web site mag worden verveelvoudigd en/of \n' at column 9, not column 8.", $entry->getReason());
     }    
     
 }
