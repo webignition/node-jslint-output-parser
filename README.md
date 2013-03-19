@@ -23,22 +23,29 @@ Running JSLint from the command line through node-jslint can give you a nice
 collection of error information to process:
 
 ```bash
-node jslint.js /home/jon/www/gears.simplytestable.com/src/SimplyTestable/WebClientBundle/Resources/public/js/app.js
+node jslint.js --json /home/jon/www/gears.simplytestable.com/src/SimplyTestable/WebClientBundle/Resources/public/js/app.js
 
- #1 Unexpected '(space)'.
-    application.progress.testController = function () { // Line 4, Pos 52
- #2 Missing 'use strict' statement.
-    var latestTestData = {}; // Line 5, Pos 5
- #3 Unexpected '(space)'.
-     // Line 6, Pos 1
- #4 Combine this with the previous 'var' statement.
-    var setCompletionPercentValue = function () { // Line 7, Pos 9
- #5 '$' was used before it was defined.
-    var completionPercentValue = $('#completion-percent-value'); // Line 8, Pos 38
- #6 Unexpected '(space)'.
-     // Line 9, Pos 1
- #7 Stopping.  (4% scanned).
-    // Line 52, Pos 14
+[
+   "/home/jon/www/gears.simplytestable.com/src/SimplyTestable/WebClientBundle/Resources/public/js/app.js",
+   [
+      {
+         "id":"(error)",
+         "raw":"Missing 'use strict' statement.",
+         "evidence":"    var nextTaskIdCollection = [];",
+         "line":6,
+         "character":5,
+         "a":"var",
+         "reason":"Missing 'use strict' statement."
+      },
+      {
+         "id":"(error)",
+         "raw":"Unexpected '{a}'.",
+         "evidence":"    ",
+         "line":7,
+         "character":1,
+         "a":"(space)",
+         "reason":"Unexpected '(space)'."
+      },
 ```
 
 Let's parse that in a unit test and see what we can get:
@@ -57,8 +64,8 @@ $this->assertEquals(4, $nodeJsLintOutput->getPercentScanned());
 $outputEntries = $nodeJsLintOutput->getEntries();
 foreach ($outputEntries as $outputEntry) {
     /* @var $outputEntry \webignition\NodeJslintOutput\Entry\Entry */    
-    echo $outputEntry->getHeaderLine() . "\n";
-    echo $outputEntry->getFragmentLine() . "\n";    
+    echo $outputEntry->getReason() . "\n";
+    echo $outputEntry->getEvidence() . "\n";    
 }
 ```
 
