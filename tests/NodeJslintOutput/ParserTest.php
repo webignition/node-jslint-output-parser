@@ -75,6 +75,16 @@ class ParserTest extends BaseTest {
         $this->assertTrue($nodeJsLintOutput->wasStopped());
         $this->assertFalse($nodeJsLintOutput->hasTooManyErrors());
         $this->assertEquals('/home/example/source.js', $nodeJsLintOutput->getStatusLine());        
-    }    
+    } 
+    
+    public function testParseInvalidControlCharacterLackingParameter() {
+        $output = $this->getFixture('InvalidControlCharacterLackingParameter.txt');
+        
+        $parser = new Parser();        
+        $parseResult = $parser->parse($output);
+        
+        $this->assertTrue($parseResult);
+        $parser->getNodeJsLintOutput();           
+    }
     
 }

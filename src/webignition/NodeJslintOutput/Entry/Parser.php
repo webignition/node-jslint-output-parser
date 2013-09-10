@@ -58,24 +58,57 @@ class Parser {
             $this->entry->setRaw($rawEntryObject->{self::RAw_PROPERTY_NAME});
             
             if ($this->expectsParameters($rawEntryObject->{self::RAw_PROPERTY_NAME})) {
-                $expectedParameterNames = $this->getExpectedParameterNames($rawEntryObject->{self::RAw_PROPERTY_NAME});
-                $parameters = array();
-                foreach ($expectedParameterNames as $expectedParameterName) {
-                    if (!isset($rawEntryObject->$expectedParameterName)) {
-                        throw new ParserException('Missing expected parameter "'.$expectedParameterName.'"', 2);
-                    }                
-
-                    $parameters[$expectedParameterName] = $rawEntryObject->$expectedParameterName;
-                }
-
-                $this->entry->setParameters($parameters);
+                $this->entry->setParameters($this->getErrorParameters($rawEntryObject));
             }            
         }
         
         $this->entry->setReason($rawEntryObject->{self::REASON_PROPERTY_NAME});        
         
         return true;
-    } 
+    }
+    
+    private function getErrorParameters(\stdClass $rawEntryObject) {
+        $expectedParameterNames = $this->getExpectedParameterNames($rawEntryObject->{self::RAw_PROPERTY_NAME});
+        $parameters = array();
+        foreach ($expectedParameterNames as $expectedParameterName) {                    
+            if (isset($rawEntryObject->$expectedParameterName)) {
+                $parameters[$expectedParameterName] = $rawEntryObject->$expectedParameterName;
+            } else {
+                $parameter = $this->getDerivedParameter($rawEntryObject);
+                if (is_null($parameter)) {
+                    throw new ParserException('Missing expected parameter "'.$expectedParameterName.'"', 2);
+                }                
+                
+                $parameters[$expectedParameterName] = $parameter;
+            }            
+        }
+        
+        return $parameters;
+    }
+    
+    
+    /**
+     * 
+     * @param string $rawErrorMessage
+     * @return boolean
+     */
+    private function hasDerivedParameters($rawErrorMessage) {
+        return $rawErrorMessage === "Unexpected control character '{a}'.";
+    }
+    
+    
+    /**
+     * 
+     * @param \stdClass $rawEntryObject
+     * @return string|null
+     */
+    private function getDerivedParameter($rawEntryObject) {
+        if (!$this->hasDerivedParameters($rawEntryObject->{self::RAw_PROPERTY_NAME})) {
+            return null;
+        }
+        
+        return mb_substr($rawEntryObject->{self::EVIDENCE_PROPERTY_NAME}, $rawEntryObject->character, 1);
+    }
     
     
     private function expectsParameters($rawLine) {
