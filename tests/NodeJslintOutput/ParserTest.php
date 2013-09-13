@@ -87,4 +87,19 @@ class ParserTest extends BaseTest {
         $parser->getNodeJsLintOutput();           
     }
     
+    
+    public function testParsePartialStoppingOneHundredPercent() {
+        $output = $this->getFixture('OneErrorStoppingOneHundredPercent.txt');
+        
+        $parser = new Parser();
+        $parseResult = $parser->parse($output);
+        
+        $this->assertTrue($parseResult);
+        
+        $nodeJsLintOutput = $parser->getNodeJsLintOutput();
+        
+        $this->assertEquals(100, $nodeJsLintOutput->getPercentScanned());
+        $this->assertTrue($nodeJsLintOutput->wasStopped());    
+    }     
+    
 }
