@@ -102,4 +102,18 @@ class ParserTest extends BaseTest {
         $this->assertTrue($nodeJsLintOutput->wasStopped());    
     }     
     
+    public function testParseStoppingEntryWithAnyNumberOfSpaces() {
+        $output = $this->getFixture('OneErrorStoppingPartialPercent.txt');
+        
+        $parser = new Parser();
+        $parseResult = $parser->parse($output);
+        
+        $this->assertTrue($parseResult);
+        
+        $nodeJsLintOutput = $parser->getNodeJsLintOutput();
+        
+        $this->assertEquals(75, $nodeJsLintOutput->getPercentScanned());
+        $this->assertTrue($nodeJsLintOutput->wasStopped());    
+    }     
+    
 }

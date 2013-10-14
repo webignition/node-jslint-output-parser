@@ -128,7 +128,7 @@ class NodeJslintOutput {
                 $percentStringMatches = array();                
                 preg_match("/[0-9]{1,2}\%/", $entry->getReason(), $percentStringMatches);                
                 return str_replace('%', '', $percentStringMatches[0]);
-            }
+            }                        
 
                         
         }
@@ -143,7 +143,7 @@ class NodeJslintOutput {
      * @return boolean
      */
     private function isStoppingEntry(Entry $entry) {                
-        return preg_match("/Stopping\.  \([0-9]{1,3}\% scanned\)\./", $entry->getReason()) > 0;
+        return preg_match("/Stopping\.\s*\([0-9]{1,3}\% scanned\)\./", $entry->getReason()) > 0;
     }
     
     
