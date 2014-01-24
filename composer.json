@@ -1,7 +1,7 @@
 {
     "name": "webignition/node-jslint-output-parser",
     "description": "Parser for the output of reid / node-jslint, get lovely things such as a list of errors, error counts, % of content scanned, bunnies",
-    "keywords": ["RSS"],
+    "keywords": ["jslint", "wrapper"],
     "homepage": "https://github.com/webignition/node-jslint-output-parser",
     "type": "library",
     "license": "MIT",
