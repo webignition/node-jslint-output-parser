@@ -1,9 +1,13 @@
 <?php
 
+namespace webignition\Tests\NodeJslintOutput;
+
 use webignition\NodeJslintOutput\Entry\Parser as EntryParser;
 use webignition\NodeJslintOutput\Entry\Serializer as EntrySerializer;
 
-class EntrySerializeTest extends BaseTest {
+use webignition\Tests\NodeJslintOutput\BaseTest;
+
+class SerializeTest extends BaseTest {
     
     public function setUp() {
         $this->setTestFixturePath(__CLASS__, $this->getName());

@@ -14,8 +14,8 @@
     bootstrap                   = "tests/bootstrap.php" >
 
     <testsuites>
-        <testsuite name="Default Test Suite">
-            <directory>tests/</directory>
+        <testsuite name="DefaultTestSuite">
+            <directory>./tests/webignition/Tests</directory>
         </testsuite>
     </testsuites>
 

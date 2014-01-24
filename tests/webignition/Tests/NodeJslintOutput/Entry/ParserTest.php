@@ -1,8 +1,11 @@
 <?php
 
-use webignition\NodeJslintOutput\Entry\Parser as EntryParser;
+namespace webignition\Tests\NodeJslintOutput\Entry;
 
-class EntryParserTest extends BaseTest {
+use webignition\NodeJslintOutput\Entry\Parser as EntryParser;
+use webignition\Tests\NodeJslintOutput\BaseTest;
+
+class ParserTest extends BaseTest {
     
     public function setUp() {
         $this->setTestFixturePath(__CLASS__, $this->getName());

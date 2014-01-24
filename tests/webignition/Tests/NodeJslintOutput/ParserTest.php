@@ -1,5 +1,7 @@
 <?php
 
+namespace webignition\Tests\NodeJslintOutput;
+
 use webignition\NodeJslintOutput\Parser as Parser;
 
 class ParserTest extends BaseTest {

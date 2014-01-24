@@ -1,8 +1,10 @@
 <?php
 
-abstract class BaseTest extends PHPUnit_Framework_TestCase {  
+namespace webignition\Tests\NodeJslintOutput;
+
+abstract class BaseTest extends \PHPUnit_Framework_TestCase {  
     
-    const FIXTURES_BASE_PATH = '/fixtures';
+    const FIXTURES_BASE_PATH = '../../../../fixtures';
     
     /**
      *
