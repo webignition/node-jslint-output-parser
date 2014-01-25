@@ -1,0 +1,4 @@
+/usr/share/node-jslint/node_modules/jslint/bin/jslint.js:73
+            throw err;
+                  ^
+Error: ENOENT, open '/home/example/script.js'

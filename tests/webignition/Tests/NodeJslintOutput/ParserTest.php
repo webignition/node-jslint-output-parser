@@ -116,6 +116,16 @@ class ParserTest extends BaseTest {
         
         $this->assertEquals(75, $nodeJsLintOutput->getPercentScanned());
         $this->assertTrue($nodeJsLintOutput->wasStopped());    
-    }     
+    }  
+    
+    public function testInputFileNotFound() {
+        $this->setExpectedException('webignition\NodeJsLintOutput\Exception', 'Input file "/home/example/script.js" not found', 1);
+        
+        $output = $this->getFixture('InputFileNotFound.txt');
+        
+        $parser = new Parser();
+        $parser->parse($output);      
+    }
+    
     
 }
