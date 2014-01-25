@@ -94,6 +94,8 @@ class Parser {
         
         $entries = $nodeJsLintOutputObject[1];
         if (count($entries) === 0) {
+            return $this->nodeJsLintOutput;
+            
             return true;
         }
 
@@ -106,17 +108,19 @@ class Parser {
             }
         }
         
+        return $this->nodeJsLintOutput;
+        
         return true;
     }    
     
     
-    /**
-     * 
-     * @return NodeJslintOutput
-     */
-    public function getNodeJsLintOutput() {
-        return $this->nodeJsLintOutput;
-    }
+//    /**
+//     * 
+//     * @return NodeJslintOutput
+//     */
+//    public function getNodeJsLintOutput() {
+//        return $this->nodeJsLintOutput;
+//    }
     
     
     /**
