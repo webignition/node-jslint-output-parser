@@ -1,20 +1,28 @@
 <?php
 
-namespace webignition\Tests\NodeJslintOutput;
+namespace webignition\Tests\NodeJslintOutput\Parser;
+
+use webignition\Tests\NodeJslintOutput\BaseTest;
 
 use webignition\NodeJslintOutput\Parser as Parser;
 
 class ParserTest extends BaseTest {
     
+    private $parser;
+    
     public function setUp() {
         $this->setTestFixturePath(__CLASS__, $this->getName());
+        
+        $this->parser = new Parser();
     }
     
-    public function testParseErrorFreeOutput() {
-        $output = $this->getFixture('ErrorFreeScan.txt');
-        
-        $parser = new Parser();
-        $nodeJsLintOutput = $parser->parse($output);
+    
+    private function getOutput() {
+        return $this->getFixture(str_replace('test', '', $this->getName())  . '.txt');
+    }      
+    
+    public function testErrorFreeOutput() {        
+        $nodeJsLintOutput = $this->parser->parse($this->getOutput());
         
         $this->assertNotNull($nodeJsLintOutput);
         $this->assertEquals(0, $nodeJsLintOutput->getEntryCount());
@@ -23,11 +31,8 @@ class ParserTest extends BaseTest {
     }
     
     
-    public function testParsePartialStoppedScanOutput() {
-        $output = $this->getFixture('PartialScanTooManyErrorsSevenPercent.txt');
-        
-        $parser = new Parser();
-        $nodeJsLintOutput = $parser->parse($output);
+    public function testPartialScanTooManyErrorsSevenPercentOutput() {
+        $nodeJsLintOutput = $this->parser->parse($this->getOutput());
         
         $this->assertEquals(7, $nodeJsLintOutput->getPercentScanned());
         $this->assertEquals(51, $nodeJsLintOutput->getEntryCount());
@@ -36,11 +41,8 @@ class ParserTest extends BaseTest {
         $this->assertEquals('/home/example/source.js', $nodeJsLintOutput->getStatusLine());
     }
   
-    public function testParsePartialTooManyErrorsOutput() {
-        $output = $this->getFixture('PartialScanStoppingFiftyPercent.txt');
-        
-        $parser = new Parser();
-        $nodeJsLintOutput = $parser->parse($output);
+    public function testPartialScanStoppingFiftyPercentOutput() {
+        $nodeJsLintOutput = $this->parser->parse($this->getOutput());
         
         $this->assertEquals(50, $nodeJsLintOutput->getPercentScanned());
         $this->assertEquals(16, $nodeJsLintOutput->getEntryCount());
@@ -50,11 +52,8 @@ class ParserTest extends BaseTest {
     } 
     
     
-    public function testParseLargeOutput() {
-        $output = $this->getFixture('LargeOutput.txt');
-        
-        $parser = new Parser();
-        $nodeJsLintOutput = $parser->parse($output);
+    public function testLargeOutput() {        
+        $nodeJsLintOutput = $this->parser->parse($this->getOutput());
         
         $this->assertEquals(87, $nodeJsLintOutput->getPercentScanned());
         $this->assertEquals(65, $nodeJsLintOutput->getEntryCount());
@@ -63,42 +62,22 @@ class ParserTest extends BaseTest {
         $this->assertEquals('/home/example/source.js', $nodeJsLintOutput->getStatusLine());        
     } 
     
-    public function testParseInvalidControlCharacterLackingParameter() {
-        $output = $this->getFixture('InvalidControlCharacterLackingParameter.txt');
-        
-        $parser = new Parser();        
-        $parser->parse($output);    
+    public function testInvalidControlCharacterLackingParameter() {     
+        $this->parser->parse($this->getOutput());    
     }
     
     
-    public function testParsePartialStoppingOneHundredPercent() {
-        $output = $this->getFixture('OneErrorStoppingOneHundredPercent.txt');
-        
-        $parser = new Parser();
-        $nodeJsLintOutput = $parser->parse($output);
+    public function testStoppingOneHundredPercentOutput() {
+        $nodeJsLintOutput = $this->parser->parse($this->getOutput());
         
         $this->assertEquals(100, $nodeJsLintOutput->getPercentScanned());
         $this->assertTrue($nodeJsLintOutput->wasStopped());    
     }     
     
-    public function testParseStoppingEntryWithAnyNumberOfSpaces() {
-        $output = $this->getFixture('OneErrorStoppingPartialPercent.txt');
-        
-        $parser = new Parser();
-        $nodeJsLintOutput = $parser->parse($output);
+    public function testStoppingEntryWithSingleSpaceOutput() {
+        $nodeJsLintOutput = $this->parser->parse($this->getOutput());
         
         $this->assertEquals(75, $nodeJsLintOutput->getPercentScanned());
         $this->assertTrue($nodeJsLintOutput->wasStopped());    
     }  
-    
-    public function testInputFileNotFound() {
-        $this->setExpectedException('webignition\NodeJsLintOutput\Exception', 'Input file "/home/example/script.js" not found', 1);
-        
-        $output = $this->getFixture('InputFileNotFound.txt');
-        
-        $parser = new Parser();
-        $parser->parse($output);      
-    }
-    
-    
 }

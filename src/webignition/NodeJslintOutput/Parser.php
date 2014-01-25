@@ -47,13 +47,6 @@ class Parser {
     
     
     /**
-     *
-     * @var array
-     */
-    private $nodeJsLintEntries = array();
-    
-    
-    /**
      * 
      * @param string $rawOutput
      * @return boolean
@@ -69,34 +62,20 @@ class Parser {
             throw $this->getInputFileNotFoundException();
         }
         
-        $nodeJsLintOutputObject = json_decode(trim($rawOutput));        
-        if (!is_array($nodeJsLintOutputObject)) {
-            return false;
+        if (!$this->isDecodedOutputFormatCorrect()) {
+            throw new NodeJsLintOutputException('Unexpected output; is not a lint result set', NodeJsLintOutputException::CODE_UNEXPECTED_OUTPUT);
         }
         
-        if (count($nodeJsLintOutputObject) !== self::EXPECTED_NODE_JSLINT_OUTPUT_OBJECT_COUNT) {
-            return false;
-        }
+        $decodedRawOutput = $this->getDecodedRawOutput();
         
-        $statusLine = $nodeJsLintOutputObject[0];
-        if (!is_string($statusLine)) {
-            return false;
-        }
-        
-        if (!is_array($nodeJsLintOutputObject[1])) {
-            return false;
-        }
-        
-        $this->nodeJsLintEntries = $nodeJsLintOutputObject[1];
+        $statusLine = $decodedRawOutput[0];        
+        $entries = $decodedRawOutput[1];
         
         $this->nodeJsLintOutput = new NodeJslintOutput();
         $this->nodeJsLintOutput->setStatusLine($statusLine);
         
-        $entries = $nodeJsLintOutputObject[1];
         if (count($entries) === 0) {
             return $this->nodeJsLintOutput;
-            
-            return true;
         }
 
         $entryParser = new EntryParser();
@@ -109,18 +88,32 @@ class Parser {
         }
         
         return $this->nodeJsLintOutput;
+    } 
+    
+    
+    /**
+     * Is the decoded output of the format we expect?
+     * Should be a two-element array with the 0th item being the path
+     * of the file that was linted and the 1st item being the result set
+     * 
+     * @return boolean
+     */
+    private function isDecodedOutputFormatCorrect() {
+        if (!is_array($this->getDecodedRawOutput())) {
+            return false;
+        }
+        
+        $decodedRawOutput = $this->getDecodedRawOutput();
+        if (!is_string($decodedRawOutput[0])) {
+            return false;
+        }
+        
+        if (!is_array($decodedRawOutput[1])) {
+            return false;
+        }
         
         return true;
-    }    
-    
-    
-//    /**
-//     * 
-//     * @return NodeJslintOutput
-//     */
-//    public function getNodeJsLintOutput() {
-//        return $this->nodeJsLintOutput;
-//    }
+    }
     
     
     /**
@@ -161,20 +154,11 @@ class Parser {
      * @return boolean
      */
     private function isException() {
-        if ($this->isRawOutputJson()) {
+        if ($this->isDecodedOutputFormatCorrect()) {
             return false;
         }
         
         return substr_count($this->rawOutput, 'throw err;') > 0;
-    }
-    
-    
-    /**
-     * 
-     * @return boolean
-     */
-    private function isRawOutputJson() {        
-        return !is_null($this->getDecodedRawOutput());
     }
     
     
