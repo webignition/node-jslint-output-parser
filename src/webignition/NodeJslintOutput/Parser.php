@@ -23,6 +23,7 @@ use webignition\NodeJslintOutput\NodeJslintOutput;
 class Parser {
     
     const INPUT_FILE_NOT_FOUND_EXCEPTION_MARKER_PATTERN = '/Error: ENOENT, open \'[^\']+\'/';    
+    const INCORRECT_NODE_JS_PATH_EXCEPTION_MARKER_PATTERN = '/Error: Cannot find module \'[^\']+\'/';
     const EXPECTED_NODE_JSLINT_OUTPUT_OBJECT_COUNT = 2; 
     
     /**
@@ -49,7 +50,7 @@ class Parser {
     /**
      * 
      * @param string $rawOutput
-     * @return boolean
+     * @return \webignition\NodeJslintOutput\NodeJslintOutput
      * @throws \webignition\NodeJslintOutput\Exception
      */
     public function parse($rawOutput) {
@@ -60,6 +61,10 @@ class Parser {
         $this->rawOutput = trim($rawOutput);
         if ($this->isInputFileNotFoundException()) {
             throw $this->getInputFileNotFoundException();
+        }
+        
+        if ($this->isIncorrectNodeJsPathException()) {
+            throw $this->getIncorrectNodeJsPathException();
         }
         
         if (!$this->isDecodedOutputFormatCorrect()) {
@@ -131,6 +136,19 @@ class Parser {
     
     /**
      * 
+     * @return boolean
+     */
+    private function isIncorrectNodeJsPathException() {
+        if (!$this->isException()) {
+            return false;
+        }
+        
+        return preg_match(self::INCORRECT_NODE_JS_PATH_EXCEPTION_MARKER_PATTERN, $this->rawOutput) > 0;
+    }    
+    
+    
+    /**
+     * 
      * @return \webignition\NodeJslintOutput\Exception
      */
     private function getInputFileNotFoundException() {
@@ -147,6 +165,26 @@ class Parser {
         
         return new NodeJsLintOutputException('Input file "'.$path.'" not found', Exception::CODE_INPUT_FILE_NOT_FOUND);
     }
+    
+    
+    /**
+     * 
+     * @return \webignition\NodeJslintOutput\Exception
+     */
+    private function getIncorrectNodeJsPathException() {
+        $path = null;
+        $rawOutputLines = explode("\n", $this->rawOutput);
+        foreach ($rawOutputLines as $rawOutputLine) {
+            if (preg_match(self::INCORRECT_NODE_JS_PATH_EXCEPTION_MARKER_PATTERN, $rawOutputLine)) {
+                $firstQuotePosition = strpos($rawOutputLine, "'");
+                $lastQuotePosition = strrpos($rawOutputLine, "'");
+                $length = $lastQuotePosition - $firstQuotePosition - 1;                
+                $path = substr($rawOutputLine, $firstQuotePosition + 1, $length);
+            }
+        }
+        
+        return new NodeJsLintOutputException('node-jslint not found at "'.$path.'"', Exception::CODE_INCORRECT_NODE_JS_PATH);
+    }    
     
     
     /**
