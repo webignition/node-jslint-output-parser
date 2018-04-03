@@ -3,7 +3,6 @@
 namespace webignition\Tests\NodeJslintOutput;
 
 use webignition\NodeJslintOutput\Entry\Entry;
-use webignition\NodeJslintOutput\Entry\ParserException;
 use webignition\NodeJslintOutput\NodeJslintOutput;
 
 class NodeJslintOutputTest extends \PHPUnit_Framework_TestCase

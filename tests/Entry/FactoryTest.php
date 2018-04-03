@@ -128,25 +128,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-//    public function testFoo()
-//    {
-////        var_dump(json_decode('{
-////      "id": "(error)",
-////      "raw": "Unexpected control character \'{a}\'.",
-////      "evidence": "eval((function(s){var a,c,e,i,j,o=\"\",r,t=\"\u0001",
-////      "line": 1,
-////      "character": 43,
-////      "reason": "Unexpected control character \'{a}\'."
-////    }', true));
-//
-//        var_dump(array_merge([
-//            'id' => 'foo',
-//        ], json_decode('{
-//      "evidence": "eval((function(s){var a,c,e,i,j,o=\"\",r,t=\"\u0001"
-//    }', true)));
-//        exit();
-//    }
-
     /**
      * @dataProvider createSuccessDataProvider
      *
