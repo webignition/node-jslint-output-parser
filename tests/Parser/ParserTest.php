@@ -28,6 +28,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $rawOutput
      * @param string $expectedExceptionMessage
+     * @param int $expectedExceptionCode
      *
      * @throws Exception
      * @throws ParserException

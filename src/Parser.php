@@ -27,17 +27,17 @@ class Parser
     /**
      * @var string
      */
-    private $rawOutput = null;
+    private $rawOutput;
 
     /**
-     * @var mixed
+     * @var DecodedRawOutput
      */
-    private $decodedRawOutput = null;
+    private $decodedRawOutput;
 
     /**
      * @var NodeJslintOutput
      */
-    private $nodeJsLintOutput = null;
+    private $nodeJsLintOutput;
 
     /**
      * @param string $rawOutput
@@ -53,31 +53,35 @@ class Parser
             return false;
         }
 
-        $this->rawOutput = trim($rawOutput);
-        if ($this->isInputFileNotFoundException()) {
-            throw $this->createInputFileNotFoundException();
+        $rawOutput = trim($rawOutput);
+
+        $this->rawOutput = $rawOutput;
+        $this->decodedRawOutput = new DecodedRawOutput(trim($rawOutput));
+
+        $exceptionFactory = new ExceptionFactory($rawOutput);
+
+        if ($exceptionFactory->isInputFileNotFoundException()) {
+            throw $exceptionFactory->createInputFileNotFoundException();
         }
 
-        if ($this->isIncorrectNodeJsPathException()) {
-            throw $this->getIncorrectNodeJsPathException();
+        if ($exceptionFactory->isIncorrectNodeJsPathException()) {
+            throw $exceptionFactory->createIncorrectNodeJsPathException();
         }
 
-        if (!$this->isDecodedOutputWellFormed()) {
+        if (!$this->decodedRawOutput->isWellFormed()) {
             throw new NodeJsLintOutputException(
                 'Unexpected output; is not a lint result set',
                 NodeJsLintOutputException::CODE_UNEXPECTED_OUTPUT
             );
         }
 
-        $decodedRawOutput = $this->getDecodedRawOutput();
-
-        $statusLine = $decodedRawOutput[0];
-        $entries = $decodedRawOutput[1];
+        $statusLine = $this->decodedRawOutput->getStatusLine();
+        $entries = $this->decodedRawOutput->getLintResult();
 
         $this->nodeJsLintOutput = new NodeJslintOutput();
         $this->nodeJsLintOutput->setStatusLine($statusLine);
 
-        if (count($entries) === 0) {
+        if (empty($entries)) {
             return $this->nodeJsLintOutput;
         }
 
@@ -90,125 +94,5 @@ class Parser
         }
 
         return $this->nodeJsLintOutput;
-    }
-
-    /**
-     * Is the decoded output of the format we expect?
-     * Should be a two-element array with item zero being the path
-     * of the file that was linted and the item one being the result set
-     *
-     * @return bool
-     */
-    private function isDecodedOutputWellFormed()
-    {
-        if (!is_array($this->getDecodedRawOutput())) {
-            return false;
-        }
-
-        $decodedRawOutput = $this->getDecodedRawOutput();
-        if (!is_string($decodedRawOutput[0])) {
-            return false;
-        }
-
-        if (!is_array($decodedRawOutput[1])) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isInputFileNotFoundException()
-    {
-        if (!$this->isException()) {
-            return false;
-        }
-
-        return preg_match(self::INPUT_FILE_NOT_FOUND_EXCEPTION_MARKER_PATTERN, $this->rawOutput) > 0;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isIncorrectNodeJsPathException()
-    {
-        if (!$this->isException()) {
-            return false;
-        }
-
-        return preg_match(self::INCORRECT_NODE_JS_PATH_EXCEPTION_MARKER_PATTERN, $this->rawOutput) > 0;
-    }
-
-    /**
-     * @return Exception
-     */
-    private function createInputFileNotFoundException()
-    {
-        $path = null;
-        $rawOutputLines = explode("\n", $this->rawOutput);
-
-        foreach ($rawOutputLines as $rawOutputLine) {
-            if (preg_match(self::INPUT_FILE_NOT_FOUND_EXCEPTION_MARKER_PATTERN, $rawOutputLine)) {
-                $firstQuotePosition = strpos($rawOutputLine, "'");
-                $lastQuotePosition = strrpos($rawOutputLine, "'");
-                $length = $lastQuotePosition - $firstQuotePosition - 1;
-                $path = substr($rawOutputLine, $firstQuotePosition + 1, $length);
-            }
-        }
-
-        return new NodeJsLintOutputException(
-            'Input file "' . $path . '" not found',
-            Exception::CODE_INPUT_FILE_NOT_FOUND
-        );
-    }
-
-    /**
-     * @return Exception
-     */
-    private function getIncorrectNodeJsPathException()
-    {
-        $path = null;
-        $rawOutputLines = explode("\n", $this->rawOutput);
-
-        foreach ($rawOutputLines as $rawOutputLine) {
-            if (preg_match(self::INCORRECT_NODE_JS_PATH_EXCEPTION_MARKER_PATTERN, $rawOutputLine)) {
-                $firstQuotePosition = strpos($rawOutputLine, "'");
-                $lastQuotePosition = strrpos($rawOutputLine, "'");
-                $length = $lastQuotePosition - $firstQuotePosition - 1;
-                $path = substr($rawOutputLine, $firstQuotePosition + 1, $length);
-            }
-        }
-
-        return new NodeJsLintOutputException(
-            'node-jslint not found at "' . $path . '"',
-            Exception::CODE_INCORRECT_NODE_JS_PATH
-        );
-    }
-
-    /**
-     *
-     * @return bool
-     */
-    private function isException()
-    {
-        if ($this->isDecodedOutputWellFormed()) {
-            return false;
-        }
-
-        return substr_count($this->rawOutput, 'throw err;') > 0;
-    }
-
-    /**
-     * @return \stdClass|null
-     */
-    private function getDecodedRawOutput()
-    {
-        if (is_null($this->decodedRawOutput)) {
-            $this->decodedRawOutput = json_decode($this->rawOutput, true);
-        }
-
-        return $this->decodedRawOutput;
     }
 }
