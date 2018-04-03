@@ -76,6 +76,7 @@ class Factory
                 $parameters[$expectedParameterName] = $entryData[$expectedParameterName];
             } else {
                 $parameter = $this->getDerivedParameter($entryData);
+
                 if (is_null($parameter)) {
                     throw new ParserException('Missing expected parameter "'.$expectedParameterName.'"', 2);
                 }
