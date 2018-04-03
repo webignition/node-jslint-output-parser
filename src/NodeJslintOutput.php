@@ -1,14 +1,15 @@
 <?php
+
 namespace webignition\NodeJslintOutput;
 
 use webignition\NodeJslintOutput\Entry\Entry;
 
 /**
  * Models the output from nodejs-lint
- * 
+ *
  * Output comprises a collection of entries. Each entry comprises a header line
  * and a fragment line.
- * 
+ *
  * Example output with 3 entries:
  * /home/example/example.js
  *  #1 Unexpected '(space)'.
@@ -16,161 +17,131 @@ use webignition\NodeJslintOutput\Entry\Entry;
  *  #2 Unexpected '(space)'.
  *     // Line 6, Pos 1
  *  #3 Combine this with the previous 'var' statement.
- *     var setCompletionPercentValue = function () { // Line 7, Pos 9 
- * 
+ *     var setCompletionPercentValue = function () { // Line 7, Pos 9
+ *
  */
-class NodeJslintOutput {
-    
+class NodeJslintOutput
+{
     /**
-     *
      * @var string
      */
     private $statusLine = null;
-    
-    
+
     /**
-     *
      * @var array
      */
-    private $entries = array();
-    
-    
+    private $entries = [];
+
     /**
-     * 
      * @param string $statusLine
      */
-    public function setStatusLine($statusLine) {
+    public function setStatusLine($statusLine)
+    {
         $this->statusLine = $statusLine;
     }
-    
-    
+
     /**
-     * 
      * @return string
      */
-    public function getStatusLine() {
+    public function getStatusLine()
+    {
         return $this->statusLine;
     }
-    
-    
+
     /**
-     * 
      * @return int
      */
-    public function getEntryCount() {
+    public function getEntryCount()
+    {
         return count($this->entries);
     }
-    
-    
+
     /**
-     * 
      * @return array
      */
-    public function getEntries() {
+    public function getEntries()
+    {
         return $this->entries;
     }
-    
-    
+
     /**
-     * 
-     * @param \webignition\NodeJslintOutput\Entry\Entry $entry
+     * @param Entry $entry
      */
-    public function addEntry(Entry $entry) {
+    public function addEntry(Entry $entry)
+    {
         $this->entries[] = $entry;
     }
-    
-    
+
     /**
-     * 
-     * @return boolean
+     * @return bool
      */
-    public function wasStopped() {
+    public function wasStopped()
+    {
         foreach ($this->entries as $entry) {
             if ($this->isStoppingEntry($entry)) {
                 return true;
-            }          
+            }
         }
-        
-        return false;        
+
+        return false;
     }
-    
+
     /**
-     * 
-     * @return boolean
+     * @return bool
      */
-    public function hasTooManyErrors() {
+    public function hasTooManyErrors()
+    {
         foreach ($this->entries as $entry) {
             if ($this->isTooManyErrorsEntry($entry)) {
                 return true;
-            }          
+            }
         }
-        
-        return false;        
-    }    
-    
-    
+
+        return false;
+    }
+
     /**
-     * 
      * @return int
      */
-    public function getPercentScanned() {
-        foreach ($this->entries as $entry) {            
+    public function getPercentScanned()
+    {
+        foreach ($this->entries as $entry) {
             /* @var $entry Entry */
-            
+
 
             if ($this->isStoppingEntry($entry)) {
-                $percentStringMatches = array();                
-                preg_match("/[0-9]{1,3}\%/", $entry->getReason(), $percentStringMatches);                
+                $percentStringMatches = array();
+                preg_match("/[0-9]{1,3}\%/", $entry->getReason(), $percentStringMatches);
                 return str_replace('%', '', $percentStringMatches[0]);
             }
 
             if ($this->isTooManyErrorsEntry($entry)) {
-                $percentStringMatches = array();                
-                preg_match("/[0-9]{1,2}\%/", $entry->getReason(), $percentStringMatches);                
+                $percentStringMatches = array();
+                preg_match("/[0-9]{1,2}\%/", $entry->getReason(), $percentStringMatches);
                 return str_replace('%', '', $percentStringMatches[0]);
-            }                        
-
-                        
+            }
         }
-        
+
         return 100;
     }
-    
-    
+
     /**
-     * 
-     * @param \webignition\NodeJslintOutput\Entry\Entry $entry
-     * @return boolean
+     * @param Entry $entry
+     *
+     * @return bool
      */
-    private function isStoppingEntry(Entry $entry) {                
+    private function isStoppingEntry(Entry $entry)
+    {
         return preg_match("/Stopping\.\s*\([0-9]{1,3}\% scanned\)\./", $entry->getReason()) > 0;
     }
-    
-    
+
     /**
-     * 
-     * @param \webignition\NodeJslintOutput\Entry\Entry $entry
-     * @return boolean
+     * @param Entry $entry
+     *
+     * @return bool
      */
-    private function isTooManyErrorsEntry(Entry $entry) {        
+    private function isTooManyErrorsEntry(Entry $entry)
+    {
         return preg_match("/Too many errors\. \([0-9]{1,2}\% scanned\)\./", $entry->getReason()) > 0;
     }
-    
-    
-    public function __toArray() {
-        $array = array(
-            'statusLine' => $this->getStatusLine(),
-            'entries' => array()
-        );
-        
-        $entries = $this->getEntries();
-        foreach ($entries as $entry) {
-            $array['entries'][] = $entry->__toArray();
-        }
-        
-        return $array;
-    }
-    
-    
-    
 }
