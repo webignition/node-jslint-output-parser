@@ -11,6 +11,8 @@ class Factory
     const KEY_CHARACTER = 'character';
     const KEY_REASON = 'reason';
 
+    const UNEXPECTED_CONTROL_CHARACTER_ERROR = "Unexpected control character '{a}'.";
+
     /**
      * @var string[]
      */
@@ -89,23 +91,13 @@ class Factory
     }
 
     /**
-     * @param string $rawErrorMessage
-     *
-     * @return bool
-     */
-    private function hasDerivedParameters($rawErrorMessage)
-    {
-        return $rawErrorMessage === "Unexpected control character '{a}'.";
-    }
-
-    /**
      * @param array $entryData
      *
      * @return string|null
      */
     private function getDerivedParameter(array $entryData)
     {
-        if (!$this->hasDerivedParameters($entryData[self::KEY_RAW])) {
+        if (self::UNEXPECTED_CONTROL_CHARACTER_ERROR !== $entryData[self::KEY_RAW]) {
             return null;
         }
 
