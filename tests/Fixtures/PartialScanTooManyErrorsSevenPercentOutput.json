@@ -1,0 +1,477 @@
+[
+  "/home/example/source.js",
+  [
+    {
+      "id": "(error)",
+      "raw": "Missing 'use strict' statement.",
+      "evidence": "    var nextTaskIdCollection = [];",
+      "line": 6,
+      "character": 5,
+      "a": "var",
+      "reason": "Missing 'use strict' statement."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "    ",
+      "line": 7,
+      "character": 1,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Combine this with the previous 'var' statement.",
+      "evidence": "    var getResultsUrl = function () {",
+      "line": 8,
+      "character": 9,
+      "a": "getResultsUrl",
+      "reason": "Combine this with the previous 'var' statement."
+    },
+    {
+      "id": "(error)",
+      "raw": "'{a}' was used before it was defined.",
+      "evidence": "        return window.location.href.replace('/preparing/', '');",
+      "line": 9,
+      "character": 16,
+      "a": "window",
+      "reason": "'window' was used before it was defined."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "    ",
+      "line": 11,
+      "character": 1,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Combine this with the previous 'var' statement.",
+      "evidence": "    var getUnretrievedRemoteTaskIdsUrl = function () {",
+      "line": 12,
+      "character": 9,
+      "a": "getUnretrievedRemoteTaskIdsUrl",
+      "reason": "Combine this with the previous 'var' statement."
+    },
+    {
+      "id": "(error)",
+      "raw": "'{a}' was used before it was defined.",
+      "evidence": "        return window.location.href.replace('/results/preparing/', '/tasks/ids/unretrieved/100/');",
+      "line": 13,
+      "character": 16,
+      "a": "window",
+      "reason": "'window' was used before it was defined."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "    ",
+      "line": 15,
+      "character": 1,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Combine this with the previous 'var' statement.",
+      "evidence": "    var getTaskResultsRetrieveUrl = function () {        ",
+      "line": 16,
+      "character": 9,
+      "a": "getTaskResultsRetrieveUrl",
+      "reason": "Combine this with the previous 'var' statement."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "    var getTaskResultsRetrieveUrl = function () {        ",
+      "line": 16,
+      "character": 50,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "'{a}' was used before it was defined.",
+      "evidence": "        return window.location.href.replace('/preparing/', '/retrieve/');",
+      "line": 17,
+      "character": 16,
+      "a": "window",
+      "reason": "'window' was used before it was defined."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "    ",
+      "line": 19,
+      "character": 1,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Combine this with the previous 'var' statement.",
+      "evidence": "    var getRetrievalStatusUrl = function () {",
+      "line": 20,
+      "character": 9,
+      "a": "getRetrievalStatusUrl",
+      "reason": "Combine this with the previous 'var' statement."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "    ",
+      "line": 23,
+      "character": 1,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Combine this with the previous 'var' statement.",
+      "evidence": "    var getRetrievalStatus = function () {        ",
+      "line": 24,
+      "character": 9,
+      "a": "getRetrievalStatus",
+      "reason": "Combine this with the previous 'var' statement."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "    var getRetrievalStatus = function () {        ",
+      "line": 24,
+      "character": 43,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "'{a}' was used before it was defined.",
+      "evidence": "        jQuery.ajax({",
+      "line": 25,
+      "character": 9,
+      "a": "jQuery",
+      "reason": "'jQuery' was used before it was defined."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            complete:function (request, textStatus) {",
+      "line": 26,
+      "character": 22,
+      "a": ":",
+      "b": "function",
+      "reason": "Missing space between ':' and 'function'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            dataType:'json',",
+      "line": 29,
+      "character": 22,
+      "a": ":",
+      "b": "json",
+      "reason": "Missing space between ':' and 'json'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            error:function (request, textStatus, errorThrown) {",
+      "line": 30,
+      "character": 19,
+      "a": ":",
+      "b": "function",
+      "reason": "Missing space between ':' and 'function'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "            success: function (data, textStatus, request) {                ",
+      "line": 41,
+      "character": 60,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "'{a}' was used before it was defined.",
+      "evidence": "                $('#completion-percent-value').text(data['completion-percent']);",
+      "line": 42,
+      "character": 17,
+      "a": "$",
+      "reason": "'$' was used before it was defined."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "                ",
+      "line": 44,
+      "character": 1,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "                    'width':data['completion-percent'] + '%'",
+      "line": 46,
+      "character": 29,
+      "a": ":",
+      "b": "data",
+      "reason": "Missing space between ':' and 'data'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "                ",
+      "line": 48,
+      "character": 1,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "                ",
+      "line": 51,
+      "character": 1,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "'{a}' was used before it was defined.",
+      "evidence": "                initialise();",
+      "line": 52,
+      "character": 17,
+      "a": "initialise",
+      "reason": "'initialise' was used before it was defined."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            url:getRetrievalStatusUrl()",
+      "line": 54,
+      "character": 17,
+      "a": ":",
+      "b": "getRetrievalStatusUrl",
+      "reason": "Missing space between ':' and 'getRetrievalStatusUrl'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "        });         ",
+      "line": 55,
+      "character": 12,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "    ",
+      "line": 57,
+      "character": 1,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Combine this with the previous 'var' statement.",
+      "evidence": "    var retrieveNextRemoteTaskIdCollection = function () {",
+      "line": 58,
+      "character": 9,
+      "a": "retrieveNextRemoteTaskIdCollection",
+      "reason": "Combine this with the previous 'var' statement."
+    },
+    {
+      "id": "(error)",
+      "raw": "'{a}' was used before it was defined.",
+      "evidence": "        jQuery.ajax({",
+      "line": 59,
+      "character": 9,
+      "a": "jQuery",
+      "reason": "'jQuery' was used before it was defined."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            type:'POST',",
+      "line": 60,
+      "character": 18,
+      "a": ":",
+      "b": "POST",
+      "reason": "Missing space between ':' and 'POST'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            complete:function (request, textStatus) {",
+      "line": 61,
+      "character": 22,
+      "a": ":",
+      "b": "function",
+      "reason": "Missing space between ':' and 'function'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            dataType:'json',",
+      "line": 64,
+      "character": 22,
+      "a": ":",
+      "b": "json",
+      "reason": "Missing space between ':' and 'json'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            error:function (request, textStatus, errorThrown) {",
+      "line": 65,
+      "character": 19,
+      "a": ":",
+      "b": "function",
+      "reason": "Missing space between ':' and 'function'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            data:{",
+      "line": 76,
+      "character": 18,
+      "a": ":",
+      "b": "{",
+      "reason": "Missing space between ':' and '{'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "                'remoteTaskIds':nextTaskIdCollection.join(',')",
+      "line": 77,
+      "character": 33,
+      "a": ":",
+      "b": "nextTaskIdCollection",
+      "reason": "Missing space between ':' and 'nextTaskIdCollection'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            url:getTaskResultsRetrieveUrl()",
+      "line": 82,
+      "character": 17,
+      "a": ":",
+      "b": "getTaskResultsRetrieveUrl",
+      "reason": "Missing space between ':' and 'getTaskResultsRetrieveUrl'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "        }); ",
+      "line": 83,
+      "character": 12,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Combine this with the previous 'var' statement.",
+      "evidence": "    var getNextRemoteTaskIdCollection = function () {",
+      "line": 85,
+      "character": 9,
+      "a": "getNextRemoteTaskIdCollection",
+      "reason": "Combine this with the previous 'var' statement."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "        ",
+      "line": 88,
+      "character": 1,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "'{a}' was used before it was defined.",
+      "evidence": "        jQuery.ajax({",
+      "line": 89,
+      "character": 9,
+      "a": "jQuery",
+      "reason": "'jQuery' was used before it was defined."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            complete:function (request, textStatus) {",
+      "line": 90,
+      "character": 22,
+      "a": ":",
+      "b": "function",
+      "reason": "Missing space between ':' and 'function'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            dataType:'json',",
+      "line": 93,
+      "character": 22,
+      "a": ":",
+      "b": "json",
+      "reason": "Missing space between ':' and 'json'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            error:function (request, textStatus, errorThrown) {",
+      "line": 94,
+      "character": 19,
+      "a": ":",
+      "b": "function",
+      "reason": "Missing space between ':' and 'function'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Missing space between '{a}' and '{b}'.",
+      "evidence": "            url:getUnretrievedRemoteTaskIdsUrl()",
+      "line": 109,
+      "character": 17,
+      "a": ":",
+      "b": "getUnretrievedRemoteTaskIdsUrl",
+      "reason": "Missing space between ':' and 'getUnretrievedRemoteTaskIdsUrl'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "        });        ",
+      "line": 110,
+      "character": 12,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "    ",
+      "line": 112,
+      "character": 1,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "id": "(error)",
+      "raw": "Unexpected '{a}'.",
+      "evidence": "    ",
+      "line": 113,
+      "character": 1,
+      "a": "(space)",
+      "reason": "Unexpected '(space)'."
+    },
+    {
+      "reason": "Too many errors. (7% scanned).",
+      "line": 113,
+      "character": 1
+    },
+    null
+  ]
+]

@@ -150,12 +150,4 @@ class Entry
     {
         return $this->parameters;
     }
-
-    /**
-     * @return bool
-     */
-    public function hasParameters()
-    {
-        return count($this->getParameters()) > 0;
-    }
 }

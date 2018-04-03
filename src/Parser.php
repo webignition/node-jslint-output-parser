@@ -62,7 +62,7 @@ class Parser
             throw $this->getIncorrectNodeJsPathException();
         }
 
-        if (!$this->isDecodedOutputFormatCorrect()) {
+        if (!$this->isDecodedOutputWellFormed()) {
             throw new NodeJsLintOutputException(
                 'Unexpected output; is not a lint result set',
                 NodeJsLintOutputException::CODE_UNEXPECTED_OUTPUT
@@ -94,12 +94,12 @@ class Parser
 
     /**
      * Is the decoded output of the format we expect?
-     * Should be a two-element array with the 0th item being the path
-     * of the file that was linted and the 1st item being the result set
+     * Should be a two-element array with item zero being the path
+     * of the file that was linted and the item one being the result set
      *
      * @return bool
      */
-    private function isDecodedOutputFormatCorrect()
+    private function isDecodedOutputWellFormed()
     {
         if (!is_array($this->getDecodedRawOutput())) {
             return false;
@@ -193,7 +193,7 @@ class Parser
      */
     private function isException()
     {
-        if ($this->isDecodedOutputFormatCorrect()) {
+        if ($this->isDecodedOutputWellFormed()) {
             return false;
         }
 
