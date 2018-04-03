@@ -12,9 +12,14 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "webignition\\Tests": "tests/",
-            "": "src/"
+        "psr-4": {
+            "webignition\\NodeJslintOutput\\": "src/",
+            "webignition\\Tests\\HtmlDocumentLinkUrlFinder\\": "tests/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "webignition\\Tests\\NodeJslintOutput\\": "tests/"
         }
     },
     "scripts": {

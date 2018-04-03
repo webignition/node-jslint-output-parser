@@ -14,8 +14,8 @@
     bootstrap                   = "vendor/autoload.php" >
 
     <testsuites>
-        <testsuite name="DefaultTestSuite">
-            <directory>./tests/webignition/Tests</directory>
+        <testsuite name="Default Test Suite">
+            <directory>tests/</directory>
         </testsuite>
     </testsuites>
 
